@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import Copyright from './components/Copyright.js'
+import Navbar from './components/Navbar.js'
+import Home from './pages/home.js'
+import { Route, BrowserRouter, Routes } from 'react-router-dom';
+import AdministracionProductos from './pages/administracion_productos.js'
+import Context from './helpers/Context.js'
+const App = () => {
 
-function App() {
+  const [precioCarta, setPrecioCarta] = React.useState({
+    empanadas: 200,
+    lomos: 1000,
+    pizzas: 1000
+  });
+  const value = { precioCarta, setPrecioCarta }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Context.Provider value={value}>
+      <BrowserRouter>
+        <div class="App">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/administracion-productos" element={<AdministracionProductos />} />
+            <Route path="*" element={<Home />} />
+          </Routes>
+          <Copyright />
+
+        </div>
+      </BrowserRouter >
+    </Context.Provider>
+  )
 }
 
-export default App;
+export default App
+
+
+
+
+
+
+
