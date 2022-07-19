@@ -73,13 +73,21 @@ const PersonalizedChipRemove = styled('div')({
 
 
 const Producto = (props) => {
-    const { name, setProductos, productos , clear, setClear} = props
+    const {limpiarProductos, name, setProductos, productos , clear, setClear, tipoProducto} = props
     const [cantidad, setCantidad] = useState(0);
-
     // Agregamos el item, actualizando el texto y la cantidad en el producto
     const addItem = () => {
+        console.log(tipoProducto);
         setCantidad(cantidad + 1);
-        setProductos({ ...productos, [name]: cantidad + 1 });
+        
+        let objectIndex = productos.findIndex((obj => obj.name === name));
+        if(objectIndex === -1){
+            setProductos([...productos, {name, cantidad: 1, tipoProducto}])
+        }else{
+            productos[objectIndex].cantidad = productos[objectIndex].cantidad + 1;
+            setProductos([...productos])
+        }
+
     };
 
     useEffect(()=>{
@@ -87,7 +95,7 @@ const Producto = (props) => {
             limpiarFormulario();
             setClear(false)
         }
-    }, [clear])
+    }, [clear, setClear])
 
     const limpiarFormulario = () => {
         setCantidad(0);
@@ -98,11 +106,18 @@ const Producto = (props) => {
         // Decrementamos el item, actualizando el texto y la cantidad en el producto
         if (cantidad > 0) {
             if(cantidad === 1) {
-                delete productos[name];
+                setProductos(productos.filter(item => item.name !== name));
                 setCantidad(cantidad - 1)
+                limpiarProductos();
+
             }else {
                 setCantidad(cantidad - 1)
-                setProductos({ ...productos, [name]: cantidad - 1 });
+                setProductos(productos.map(item => {
+                    if (item.name === name) {
+                        item.cantidad = item.cantidad - 1;
+                    }
+                    return item;
+                }));
 
             }
         }

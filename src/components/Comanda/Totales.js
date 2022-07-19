@@ -2,6 +2,7 @@ import { Typography } from '@mui/material'
 import React from 'react'
 
 const Totales = ({total, cantidadEmpanadas }) => {
+  console.log(cantidadEmpanadas)
   return (
     <div>
         <Typography textAlign={'right'} variant="h6" gutterBottom>

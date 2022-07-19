@@ -62,15 +62,16 @@ const ListaProductos = () => {
                         <Button variant="contained" sx={{backgroundColor: "#ffd800", '&:hover': {backgroundColor: '#f4ca16'}}} onClick={()=>handleOpen('empanadas', precioCarta.empanadas)}>Editar <EditIcon/> </Button>
 
                     </ListItem>
+                    
                     <ListItem>
                         <ListItemIcon>
                             <FolderIcon />
                         </ListItemIcon>
                         <ListItemText
-                            primary="Lomo"
-                            secondary={'$' + precioCarta.lomos}
+                            primary="Lomo Carne"
+                            secondary={'$' + precioCarta.lomoCarne}
                         />
-                        <Button variant="contained" sx={{backgroundColor: "#ffd800", '&:hover': {backgroundColor: '#f4ca16'}}}  onClick={()=>handleOpen('lomos', precioCarta.lomos)}>Editar <EditIcon/> </Button>
+                        <Button variant="contained" sx={{backgroundColor: "#ffd800", '&:hover': {backgroundColor: '#f4ca16'}}}  onClick={()=>handleOpen('lomoCarne', precioCarta.lomoCarne)}>Editar <EditIcon/> </Button>
 
                     </ListItem>
                     <ListItem>
@@ -78,8 +79,54 @@ const ListaProductos = () => {
                             <FolderIcon />
                         </ListItemIcon>
                         <ListItemText
+                            primary="Lomo Pollo"
+                            secondary={'$' + precioCarta.lomoPollo}
+                        />
+                        <Button variant="contained" sx={{backgroundColor: "#ffd800", '&:hover': {backgroundColor: '#f4ca16'}}}  onClick={()=>handleOpen('lomoPollo', precioCarta.lomoPollo)}>Editar <EditIcon/> </Button>
+
+                    </ListItem>
+                    
+                    <ListItem>
+                        <ListItemIcon>
+                            <FolderIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary="Hamburguesa Clásica"
+                            secondary={'$' + precioCarta.hamburguesaClasica}
+                        />
+                        <Button variant="contained" sx={{backgroundColor: "#ffd800", '&:hover': {backgroundColor: '#f4ca16'}}}  onClick={()=>handleOpen('hamburguesaClasica', precioCarta.hamburguesaClasica)}>Editar <EditIcon/> </Button>
+
+                    </ListItem>
+                    <ListItem>
+                        <ListItemIcon>
+                            <FolderIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary="Hamburguesa Americana"
+                            secondary={'$' + precioCarta.hamburguesaAmericana}
+                        />
+                        <Button variant="contained" sx={{backgroundColor: "#ffd800", '&:hover': {backgroundColor: '#f4ca16'}}}  onClick={()=>handleOpen('hamburguesaAmericana', precioCarta.hamburguesaAmericana)}>Editar <EditIcon/> </Button>
+
+                    </ListItem>
+                    <ListItem>
+                        <ListItemIcon>
+                            <FolderIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary="Hamburguesa Veggie"
+                            secondary={'$' + precioCarta.hamburguesaVeggie}
+                        />
+                        <Button variant="contained" sx={{backgroundColor: "#ffd800", '&:hover': {backgroundColor: '#f4ca16'}}}  onClick={()=>handleOpen('hamburguesaVeggie', precioCarta.hamburguesaVeggie)}>Editar <EditIcon/> </Button>
+
+                    </ListItem>
+                    
+                    <ListItem>
+                        <ListItemIcon>
+                            <FolderIcon />
+                        </ListItemIcon>
+                        <ListItemText
                             primary="Pizza"
-                            secondary={'$' + precioCarta.pizzas}
+                            secondary={'$' + precioCarta.pizza}
                         />
                         <Button variant="contained" sx={{backgroundColor: "#ffd800", '&:hover': {backgroundColor: '#f4ca16'}}}  onClick={()=>handleOpen('pizzas', precioCarta.pizzas)}>Editar <EditIcon/> </Button>
 

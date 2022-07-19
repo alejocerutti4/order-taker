@@ -8,9 +8,13 @@ import Context from './helpers/Context.js'
 const App = () => {
 
   const [precioCarta, setPrecioCarta] = React.useState({
-    empanadas: 200,
-    lomos: 1000,
-    pizzas: 1000
+    empanadas: 190,
+    lomoCarne: 1000,
+    lomoPollo: 900,
+    hamburguesaAmericana: 800,
+    hamburguesaVeggie: 900,
+    hamburguesaClasica: 800,
+    pizza: 1000
   });
   const value = { precioCarta, setPrecioCarta }
   return (

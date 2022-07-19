@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
@@ -19,7 +19,7 @@ export default function Checkout() {
 
   const [total, setTotal] = useState(0);
   const [cantidadEmpanadas, setCantidadEmpanadas] = useState(0);
-  const [productos, setProductos] = useState({});
+  const [productos, setProductos] = useState([]);
   const [datosCliente, setDatosCliente] = useState({
     nombre: '',
     telefono: '',
@@ -29,11 +29,16 @@ export default function Checkout() {
   });
   const [clear, setClear] = useState(false)
 
+  useEffect(()=>{
+    
+  },[productos])
+
+  
 
   const limpiarFormulario = () => {
     console.log("limpianding....")
     setDatosCliente({nombre: '', telefono: '', calle: {"label": ""}, altura: '', dpto: ''});
-    setProductos({});
+    setProductos([]);
     setCantidadEmpanadas(0);
     setTotal(0);
     setClear(true);
@@ -42,49 +47,75 @@ export default function Checkout() {
   }
 
   const imprimirPedido = () => {
-    const cantidadKeys = Object.keys(productos).length
-    const alturaTicket = 50 + (cantidadKeys*2)
+    const cantidadKeys = productos.length
+    const alturaTicket = 65 + (cantidadKeys*3)
     const doc = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: [55.28, alturaTicket],
 
     });
+    const left = 7;
+    const center = 16
+    const right = 18;
     // Create a template for a receipt
     // An image first
-    doc.addImage('./logo_abuela.jpg', 'JPG', 22, 5, 15, 14);
-    doc.setFontSize(6);
+    doc.addImage('./logo_abuela.jpg', 'JPG', 18, 3, 17, 16);
+    doc.setFontSize(10);
     doc.setFont('helvetica');
-    const left = 7;
-    const center = 22;
-    const right = 30;
+    
+    doc.setFontSize(6);
     doc.text(left, 20, '----------------------------------------------------------');
-    doc.text(center,22, 'Datos Cliente');
+    doc.setFontSize(10);
+    doc.text(center,23, 'Datos Cliente');
+    doc.setFontSize(6);
     doc.text(left, 24, '----------------------------------------------------------');
-    doc.text(left, 26, `Nombre: ${datosCliente.nombre}`);
+    doc.setFontSize(10);
+    doc.text(left, 27, `Nombre: ${datosCliente.nombre}`);
     const array =  datosCliente.calle.split('-')
     const calle = array[0]
     const ciudad = array[1] ? array[1] : ""
     if(datosCliente.dpto !== ''){
-      doc.text(left, 28, `Direccion: ${calle} ${datosCliente.altura} - ${ciudad}, ${datosCliente.dpto}`);
+      doc.text(left, 30, `Direccion: ${calle} ${datosCliente.altura} - ${ciudad}, ${datosCliente.dpto}`, {
+        maxWidth: 46
+      });
     }else{
-      doc.text(left, 28, `Direccion: ${calle} ${datosCliente.altura} - ${ciudad}`);
+      doc.text(left, 30, `Direccion: ${calle} ${datosCliente.altura} - ${ciudad}`, {
+        maxWidth: 44
+      });
     }
-    doc.text(left, 30, `Telefono: ${datosCliente.telefono}`);
-    doc.text(left, 31, '----------------------------------------------------------');
-    doc.text(center + 2, 33, 'Productos');
-    doc.text(left, 35, '----------------------------------------------------------');
-
+    doc.text(left, 33 + 5, `Telefono: ${datosCliente.telefono}`);
+    doc.setFontSize(6);
+    doc.text(left, 36 + 5, '----------------------------------------------------------');
+    doc.setFontSize(10);
+    doc.text(center + 2, 39 + 5, 'Productos');
+    doc.setFontSize(6);
+    doc.text(left, 40 + 5, '----------------------------------------------------------');
+    doc.setFontSize(10);
     // Recorrer producots y por cada uno pintar una línea
-    let acum = 31 + 6;
-    for (const [key, val] of Object.entries(productos)) {
-      const producto = "- " + key + ": " + val
-      doc.text(left, acum, producto)
-      acum += 2;
-
-    }
-    doc.text(left, acum, `------------------------Cant: ${cantidadEmpanadas}-----------------------`);
-    doc.text(right, acum + 4, `Precio final: $${total}`);
+    let acum = 49;
+  
+    productos.forEach(producto => {
+      if(producto.tipoProducto === 'empanada'){
+        const text = `- ${producto.name}: ${producto.cantidad}`
+        doc.text(left, acum, text)
+        acum += 3;
+      }
+    })
+    doc.setFontSize(10);
+    doc.text(left, acum, `------------Cant: ${cantidadEmpanadas}------------`);
+    acum+=3;
+    productos.forEach(producto => {
+      if(producto.tipoProducto === 'sandwich'){
+        const text = `- ${producto.name}: ${producto.cantidad}`
+        doc.text(left, acum, text)
+        acum += 3;
+      }
+    })
+    doc.setFontSize(6);
+    doc.text(left, acum+2, '----------------------------------------------------------');
+    doc.setFontSize(10);
+    doc.text(right, acum + 5, `Precio final: $${total}`);
     doc.autoPrint();  
     doc.output('dataurlnewwindow');
 
