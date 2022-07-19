@@ -1,5 +1,5 @@
 import { Autocomplete, Grid, TextField, Typography } from '@mui/material'
-import React, { useEffect } from 'react'
+import React from 'react'
 import {tablaCalles} from '../../utils/TablaCalles';
 
 const DatosCliente = ({datosCliente, setDatosCliente}) => {
@@ -7,10 +7,7 @@ const DatosCliente = ({datosCliente, setDatosCliente}) => {
     const setValue = (key, value) => {
         setDatosCliente({ ...datosCliente, [key]: value})
     }
-
-
-   
-
+ 
   
     return (
         

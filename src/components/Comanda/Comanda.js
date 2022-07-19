@@ -10,7 +10,6 @@ import Productos from './Productos';
 import Totales from './Totales'
 import { Divider } from '@mui/material';
 import jsPDF from 'jspdf';
-import { AirlineSeatReclineExtraRounded } from '@mui/icons-material';
 
 
 
@@ -65,7 +64,7 @@ export default function Checkout() {
     doc.text(left, 26, `Nombre: ${datosCliente.nombre}`);
     const array =  datosCliente.calle.split('-')
     const calle = array[0]
-    const ciudad = array[1]
+    const ciudad = array[1] ? array[1] : ""
     if(datosCliente.dpto !== ''){
       doc.text(left, 28, `Direccion: ${calle} ${datosCliente.altura} - ${ciudad}, ${datosCliente.dpto}`);
     }else{
