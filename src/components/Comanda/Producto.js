@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/system';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -40,7 +40,6 @@ const PersonalizedChipAdd = styled('div')({
     width: "26px",
     color: "#fff",
     height: "26px",
-    fontSize: "20px",
     marginRight: "-4px",
     '&:hover': {
         cursor: "pointer",
@@ -62,7 +61,6 @@ const PersonalizedChipRemove = styled('div')({
     width: "26px",
     color: "#fff",
     height: "26px",
-    fontSize: "20px",
     marginRight: "-4px",
     '&:hover': {
         cursor: "pointer",
@@ -72,31 +70,46 @@ const PersonalizedChipRemove = styled('div')({
 })
 
 
-const Producto = ({ name, setPedido, pedido }) => {
 
+
+const Producto = (props) => {
+    const { name, setProductos, productos , clear, setClear} = props
     const [cantidad, setCantidad] = useState(0);
 
-    // Agregamos el item, actualizando el texto y la cantidad en el pedido
+    // Agregamos el item, actualizando el texto y la cantidad en el producto
     const addItem = () => {
         setCantidad(cantidad + 1);
-        setPedido({ ...pedido, [name]: cantidad + 1 });
+        setProductos({ ...productos, [name]: cantidad + 1 });
+    };
+
+    useEffect(()=>{
+        if(clear){
+            limpiarFormulario();
+            setClear(false)
+        }
+    }, [clear])
+
+    const limpiarFormulario = () => {
+        setCantidad(0);
     }
 
     const removeItem = () => {
 
-        // Decrementamos el item, actualizando el texto y la cantidad en el pedido
+        // Decrementamos el item, actualizando el texto y la cantidad en el producto
         if (cantidad > 0) {
             if(cantidad === 1) {
-                delete pedido[name];
+                delete productos[name];
                 setCantidad(cantidad - 1)
             }else {
                 setCantidad(cantidad - 1)
-                setPedido({ ...pedido, [name]: cantidad - 1 });
+                setProductos({ ...productos, [name]: cantidad - 1 });
 
             }
         }
+    };
 
-    }
+    
+
     return (
         <Grid item xs={6} md={4}>
             <Div1>

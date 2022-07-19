@@ -16,7 +16,7 @@ const App = () => {
   return (
     <Context.Provider value={value}>
       <BrowserRouter>
-        <div class="App">
+        <div className="App">
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
