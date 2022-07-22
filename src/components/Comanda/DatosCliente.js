@@ -1,6 +1,8 @@
 import { Autocomplete, Grid, TextField, Typography } from '@mui/material'
 import React from 'react'
 import {tablaCalles} from '../../utils/TablaCalles';
+import PersonIcon from '@mui/icons-material/Person';
+
 
 const DatosCliente = ({datosCliente, setDatosCliente}) => {
 
@@ -12,9 +14,12 @@ const DatosCliente = ({datosCliente, setDatosCliente}) => {
     return (
         
         <>
-            <Typography variant="h6" gutterBottom>
-                Datos del cliente
-            </Typography>
+            <div style={{display: "flex", alignItems:"center"}}>
+                <Typography variant="h6" gutterBottom>
+                    Datos del cliente
+                </Typography>
+                <PersonIcon sx={{mb:1, marginLeft:"3px"}}/>
+            </div>
             <Grid container spacing={3}>
 
                 <Grid item xs={12} sm={6}>

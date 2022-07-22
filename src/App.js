@@ -5,6 +5,7 @@ import Home from './pages/home.js'
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import AdministracionProductos from './pages/administracion_productos.js'
 import Context from './helpers/Context.js'
+import './App.css';
 const App = () => {
 
   const [precioCarta, setPrecioCarta] = React.useState({

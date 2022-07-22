@@ -9,11 +9,13 @@ import RemoveIcon from '@mui/icons-material/Remove';
 const Div1 = styled('div')({
     textAlign: 'center',
     color: 'black',
-    backgroundColor: '#f5f5f5',
     height: '40px',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: '#bf8d72',
+    border: "1px solid black",
+    fontWeight: "bold"
 });
 
 const Div2 = styled('div')({
@@ -24,6 +26,7 @@ const Div2 = styled('div')({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    
 });
 
 const PersonalizedChipAdd = styled('div')({

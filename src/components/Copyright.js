@@ -4,7 +4,7 @@ import Link from '@mui/material/Link';
 
 const Copyright = () => {
     return (
-      <Typography variant="body2" color="text.secondary" align="center">
+      <Typography variant="body2" sx={{color: "white"}} align="center">
         {'Copyright © '}
         <Link color="inherit" href="https://mui.com/">
           La Abuela VM

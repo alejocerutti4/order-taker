@@ -3,6 +3,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Grid, Typography } from 
 import Producto from './Producto'
 import Context from '../../helpers/Context';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import FastfoodIcon from '@mui/icons-material/Fastfood';
 
 
 const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantidadEmpanadas, productos, setProductos }) => {
@@ -243,9 +244,12 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
   }
   return (
     <>
-      <Typography sx={{ mt: 2 }} variant="h6" gutterBottom>
-        Productos
-      </Typography>
+      <div style={{display: "flex", alignItems: "center"}}>
+        <Typography sx={{ mt: 2 }} variant="h6" gutterBottom>
+          Productos
+        </Typography>
+        <FastfoodIcon sx={{ml:1, marginTop: "2px"}}/>
+      </div>
       <Grid container spacing={3}>
         {Empanadas.map((empanada) => (
           <Producto deleteSubtotal={deleteSubtotal} limpiarProductos={limpiarProductos} setClear={setClear} clear={clear} tipoProducto={"empanada"} key={empanada} name={empanada} productos={productos} setProductos={setProductos} />
@@ -254,7 +258,7 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
 
 
       </Grid>
-      <Accordion sx={{ mt: 2 }}>
+      <Accordion sx={{ mt: 2, backgroundColor: "#bf8d72" }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -271,7 +275,7 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
           </Grid>
         </AccordionDetails>
       </Accordion>
-      <Accordion sx={{ mt: 2 }}>
+      <Accordion sx={{ mt: 2 , backgroundColor: "#bf8d72"}}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
