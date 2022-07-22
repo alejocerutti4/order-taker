@@ -12,6 +12,7 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
   const Pizzas = ["Mozzarella ", "Mozzarella Media", "Mozzarella Doble", "Mozzarella Doble Media", "Mozzarella Con Huevo", "Mozzarella Con Huevo Media", "Mozzarella Super", "Mozzarella Super Media", "Fugazzeta", "Fugazzeta Media", "Napolitana", "Napolitana Media", "Jamon Especial", "Jamon Especial Media", "Roquefort", "Roquefort Media", "Tres Quesos", "Tres Quesos Media", "Ananá", "Ananá Media", "Palmitos", "Palmitos Media", "Champignon", "Champignon Media", "Calabresa", "Calabresa Media", "Panceta", "Panceta Media"]
   const { precioCarta } = useContext(Context)
 
+
   useEffect(() => {
     let total = 0;
     let cantidad = 0;
@@ -225,11 +226,20 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
         if(objectIndex === -1){
             setSubTotal([...subTotal, {name: name, cantidad: cantidad, costo: costo}])
         }else{
+          
             subTotal[objectIndex].costo = costo;
             subTotal[objectIndex].cantidad = cantidad;
             setSubTotal([...subTotal])
         }
  
+  }
+
+  const deleteSubtotal = (name) => {
+    let objectIndex = subTotal.findIndex((obj => obj.name === name));
+    if(objectIndex !== -1){
+      subTotal.splice(objectIndex, 1);
+      setSubTotal([...subTotal])
+    }
   }
   return (
     <>
@@ -238,7 +248,7 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
       </Typography>
       <Grid container spacing={3}>
         {Empanadas.map((empanada) => (
-          <Producto limpiarProductos={limpiarProductos} setClear={setClear} clear={clear} tipoProducto={"empanada"} key={empanada} name={empanada} productos={productos} setProductos={setProductos} />
+          <Producto deleteSubtotal={deleteSubtotal} limpiarProductos={limpiarProductos} setClear={setClear} clear={clear} tipoProducto={"empanada"} key={empanada} name={empanada} productos={productos} setProductos={setProductos} />
         ))
         }
 
@@ -255,7 +265,7 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
         <AccordionDetails>
           <Grid container spacing={3}>
             {Sandwichs.map((sandwich) => (
-              <Producto limpiarProductos={limpiarProductos} setClear={setClear} clear={clear} tipoProducto={"sandwich"} key={sandwich} name={sandwich} productos={productos} setProductos={setProductos} />
+              <Producto deleteSubtotal={deleteSubtotal} limpiarProductos={limpiarProductos} setClear={setClear} clear={clear} tipoProducto={"sandwich"} key={sandwich} name={sandwich} productos={productos} setProductos={setProductos} />
             ))
             }
           </Grid>
@@ -272,7 +282,7 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
         <AccordionDetails>
           <Grid container spacing={3}>
             {Pizzas.map((pizza) => (
-              <Producto limpiarProductos={limpiarProductos} setClear={setClear} clear={clear} tipoProducto={"pizza"} key={pizza} name={pizza} productos={productos} setProductos={setProductos} />
+              <Producto deleteSubtotal={deleteSubtotal} limpiarProductos={limpiarProductos} setClear={setClear} clear={clear} tipoProducto={"pizza"} key={pizza} name={pizza} productos={productos} setProductos={setProductos} />
             ))
             }
           </Grid>

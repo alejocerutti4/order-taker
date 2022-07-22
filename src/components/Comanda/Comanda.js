@@ -38,7 +38,6 @@ export default function Checkout() {
   
 
   const limpiarFormulario = () => {
-    console.log("limpianding....")
     setDatosCliente({nombre: '', telefono: '', calle: {"label": ""}, altura: '', dpto: ''});
     setProductos([]);
     setCantidadEmpanadas(0);
@@ -168,7 +167,7 @@ export default function Checkout() {
         if(producto.tipoProducto === 'pizza'){
           const text = `- ${producto.name}: ${producto.cantidad}`
           doc.text(left, acum, text,{
-            maxWidth: 46
+            maxWidth: 43
           });
           if(producto.name.length > 20){
             acum += 7;
@@ -236,7 +235,7 @@ export default function Checkout() {
                 sx={{ mt: 3, ml: 1 }}
                 onClick={() => { limpiarFormulario() }}
               >
-                Limpiar Formulario
+                Limpiar Formulario 
               </Button>
               <Button
                 variant="contained"

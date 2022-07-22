@@ -73,11 +73,10 @@ const PersonalizedChipRemove = styled('div')({
 
 
 const Producto = (props) => {
-    const {limpiarProductos, name, setProductos, productos , clear, setClear, tipoProducto} = props
+    const {limpiarProductos, name, setProductos, productos , clear, setClear, tipoProducto, deleteSubtotal} = props
     const [cantidad, setCantidad] = useState(0);
     // Agregamos el item, actualizando el texto y la cantidad en el producto
     const addItem = () => {
-        console.log(tipoProducto);
         setCantidad(cantidad + 1);
         
         let objectIndex = productos.findIndex((obj => obj.name === name));
@@ -108,6 +107,7 @@ const Producto = (props) => {
             if(cantidad === 1) {
                 setProductos(productos.filter(item => item.name !== name));
                 setCantidad(cantidad - 1)
+                deleteSubtotal(name);
                 limpiarProductos();
 
             }else {

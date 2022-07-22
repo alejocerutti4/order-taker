@@ -1,7 +1,12 @@
 import { Typography } from '@mui/material'
 import React from 'react'
 
-const Totales = ({subTotal, total, cantidadEmpanadas }) => {
+
+const Totales = ({setSubTotal, subTotal, total, cantidadEmpanadas }) => {
+
+
+  
+
   return (
     <div>
         <Typography textAlign={'right'} variant="h6" gutterBottom>
