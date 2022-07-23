@@ -59,26 +59,26 @@ export default function Checkout() {
             <Typography component="h1" variant="h4" align="center">
               Comanda
             </Typography>
-            <CreateIcon sx={{ fontSize: "30px"}} />
+            <CreateIcon sx={{ fontSize: "30px" }} />
           </div>
 
           <React.Fragment>
 
             <DatosCliente datosCliente={datosCliente} setDatosCliente={setDatosCliente} />
             <Productos subTotal={subTotal} setSubTotal={setSubTotal} clear={clear} setClear={setClear} setTotal={setTotal} setCantidadEmpanadas={setCantidadEmpanadas} productos={productos} setProductos={setProductos} />
-            <div style={{display:"flex"}}>
+            <div style={{ display: "flex" }}>
               <Typography component="h1" variant="h5" sx={{ mt: 2 }} align="left">Notas</Typography>
-              <CreateIcon sx={{marginTop:"18px", marginLeft: "6px"}}/>
+              <CreateIcon sx={{ marginTop: "18px", marginLeft: "6px" }} />
             </div>
             <TextField
-                id="outlined-textarea"
-                label="Escriba alguna nota ..."
-                placeholder="Ingrese nota..."
-                sx={{ width: "100%" }}
-                value={notas}
-                onChange={(e) => setNotas(e.target.value)}
-                multiline
-              />
+              id="outlined-textarea"
+              label="Escriba alguna nota ..."
+              placeholder="Ingrese nota..."
+              sx={{ width: "100%" }}
+              value={notas}
+              onChange={(e) => setNotas(e.target.value)}
+              multiline
+            />
 
             <Divider sx={{ mt: 2 }} />
 
@@ -86,14 +86,14 @@ export default function Checkout() {
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button
                 variant="contained"
-                sx={{ mt: 3, ml: 1, backgroundColor: "#510029" }}
+                sx={{ mt: 3, ml: 1, backgroundColor: "#510029", '&:hover': { backgroundColor: '#38011d' }}}
                 onClick={() => { limpiarFormulario() }}
               >
                 Limpiar Formulario
               </Button>
               <Button
                 variant="contained"
-                sx={{ mt: 3, ml: 1, backgroundColor: "#510029" }}
+                sx={{ mt: 3, ml: 1, backgroundColor: "#510029", '&:hover': { backgroundColor: '#38011d' }}}
                 onClick={() => { imprimirPedido(notas, productos, datosCliente, cantidadEmpanadas, total) }}
               >
                 Imprimir

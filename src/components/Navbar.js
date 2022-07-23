@@ -13,7 +13,7 @@ const Img = styled('img')({
 
 const Div = styled('div')({
     textAlign: 'center',
-    color: 'black',
+    color: 'white',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -35,18 +35,18 @@ const Navbar = () => {
             >
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Div>
-                        <Img src="./logo_abuela_transparente.png" alt="logo" />
+                        <Img src="./logo_abuela_transparente_white.png" alt="logo" />
                       
                     </Div>
 
                     <Box sx={{ display: 'flex', justifyContent: 'space-around', mr:8}}>
                         <Link style={{ textDecoration: 'inherit' }} to="/">
-                            <Typography variant="h6" sx={{ mx: 2 }} color="black" noWrap>
+                            <Typography variant="h6" sx={{ mx: 2 }} color="white" noWrap>
                                 Comanda
                             </Typography>
                         </Link>
                         <Link style={{ textDecoration: 'inherit' }} to="/administracion-productos">
-                            <Typography sx={{ textDecoration: "none" }} variant="h6" color="black" noWrap>
+                            <Typography sx={{ textDecoration: "none" }} variant="h6" color="white" noWrap>
                                 Productos
                             </Typography>
                         </Link>

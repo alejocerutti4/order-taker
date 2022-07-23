@@ -9,11 +9,10 @@ import RemoveIcon from '@mui/icons-material/Remove';
 const Div1 = styled('div')({
     textAlign: 'center',
     color: 'black',
-    height: '40px',
+    height: '45px',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#bf8d72',
     border: "1px solid black",
     fontWeight: "bold"
 });

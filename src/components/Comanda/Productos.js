@@ -10,204 +10,32 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
   // const [pedido, setPedido] = useState({});
   const Empanadas = ["Árabes", "Albahaca", "Ananá", "Calabresa", "Carne Picante", "Carne Suave", "Cebolla", "Champignones", "Criolla Dulce", "Criolla Salada", "Gallega", "Humita", "Jamón y Queso", "Palmitos", "Panceta y Ciruela", "Pera", "Pollo", "Pollo Picante", "Puerro", "Roquefort y Apio", "Verdura", "Zapallito"];
   const Sandwichs = ["Lomo Carne", "Lomo Pollo", "Hambur. Clásica", "Hambur. Americana", "Hambur. Veggie", "Sandwich Milanesa", "Milanesa", "Milanesa Napolitana"];
-  const Pizzas = ["Mozzarella ", "Mozzarella Media", "Mozzarella Doble", "Mozzarella Doble Media", "Mozzarella Con Huevo", "Mozzarella Con Huevo Media", "Mozzarella Super", "Mozzarella Super Media", "Fugazzeta", "Fugazzeta Media", "Napolitana", "Napolitana Media", "Jamon Especial", "Jamon Especial Media", "Roquefort", "Roquefort Media", "Tres Quesos", "Tres Quesos Media", "Ananá", "Ananá Media", "Palmitos", "Palmitos Media", "Champignon", "Champignon Media", "Calabresa", "Calabresa Media", "Panceta", "Panceta Media"]
+  const Pizzas = ["Mozzarella", "Media Mozzarella", "Mozzarella Doble", "Media Mozzarella Doble", "Mozzarella Con Huevo", "Media Mozzarella Con Huevo", "Mozzarella Super", "Media Mozzarella Super", "Fugazzeta", "Media Fugazzeta", "Napolitana", "Media Napolitana", "Jamon Especial", "Media Jamon Especial", "Roquefort", "Media Roquefort", "Tres Quesos", "Media Tres Quesos", "Ananá", "Media Ananá", "Palmitos", "Media Palmitos", "Champignon", "Media Champignon", "Calabresa", "Media Calabresa", "Panceta", "Media Panceta"]
+  const Bebidas = ["Postres", "Coca 500ml", "Coca 1,5L", "Pepsi 1,25L", "Pepsi 2L", "Pepsi 1,5L", "Aquarius 1,5L", "Agua Mineral 1,5L", "Cepita 0,25L", "Brahma 1L", "Quilmes 1L", "Stella 1L", "Quilmes Stout 1L", "Patagonia x710", "Lata Patagonia", "Lata Stella", "Lata Andes", "Lata Quilmes", "Lata Quilmes Sin. Alc", "Lata Quilmes N", "Lata Wolff", "Lata Brahma", "Fernet Branca", "Vino Benjamin Malbec", "Vino Portillo Malbec", "Vino Portillo Pinot Noir", "Vino Flia Gascon Syrah", "Vino Flia Gascon Malbec", "Vino Los Cardos ", "Vino Vive Malbec", "Vino Andeluna Raices", "Vino Santa Julia Malbec Orgánico", "Vino Cordero con Piel de Lobo", "Vino De Moño Rojo Blanco", "Vino De Moño Rojo Malbec", "Vino Cafayate Malbec", "Vino Asado Club Malbec", "Vino Jean Rivier Malbec", "Vino Jean Rivier Rosado", "Vino Callia Alta Malbec ", "Vino Domingo Hnos Otoñal", "Vino LP Partridge Malbec", "Vino LP Partridge Red Blend", "Vino Laureano Gomez Rosado"];
   const { precioCarta } = useContext(Context)
 
 
   useEffect(() => {
     let total = 0;
     let cantidad = 0;
+    console.log(precioCarta);
     productos.forEach(producto => {
-      if (producto.tipoProducto === "empanada") {
-        const costo = producto.cantidad * precioCarta.empanadas;
+      if(producto.tipoProducto === "empanada"){
+        const precio = precioCarta.find(p => ((p.name).toUpperCase()).trim() === (("Empanadas").toUpperCase()).trim()).costo
+        const costo = producto.cantidad * precio;
         total += costo;
         cantidad += producto.cantidad
         updateSubtotal(producto.cantidad, producto.name, costo)
-
-      } else if (producto.tipoProducto === "sandwich") {
-        if (producto.name === "Lomo Carne") {
-          const costo = producto.cantidad * precioCarta.lomoCarne;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Lomo Pollo") {
-          const costo = producto.cantidad * precioCarta.lomoPollo;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Hambur. Clásica") {
-          const costo = producto.cantidad * precioCarta.hamburguesaClasica;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Hambur. Americana") {
-          const costo = producto.cantidad * precioCarta.hamburguesaAmericana;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Hambur. Veggie") {
-          const costo = producto.cantidad * precioCarta.hamburguesaVeggie;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Sandwich Milanesa") {
-          const costo = producto.cantidad * precioCarta.sandwichMilanesa;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Milanesa") {
-          const costo = producto.cantidad * precioCarta.milanesa;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Milanesa Napolitana") {
-          const costo = producto.cantidad * precioCarta.milanesaNapolitana;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-      } else if (producto.tipoProducto === "pizza") {
-        if (producto.name === "Mozzarella ") {
-          const costo = producto.cantidad * precioCarta.mozzarella;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Mozzarella Media") {
-          const costo = producto.cantidad * precioCarta.mozzarella_media;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Mozzarella Doble") {
-          const costo = producto.cantidad * precioCarta.mozzarellaDoble;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Mozzarella Doble Media") {
-          const costo = producto.cantidad * precioCarta.mozzarellaDoble_media;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Mozzarella Con Huevo") {
-          const costo = producto.cantidad * precioCarta.mozzarellaConHuevo;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Mozzarella Con Huevo Media") {
-          const costo = producto.cantidad * precioCarta.mozzarellaConHuevo_media;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Mozzarella Super") {
-          const costo = producto.cantidad * precioCarta.mozzarellaSuper;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Mozzarella Super Media") {
-          const costo = producto.cantidad * precioCarta.mozzarellaSuper_media;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Fugazzeta") {
-          const costo = producto.cantidad * precioCarta.fugazzeta;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Fugazzeta Media") {
-          const costo = producto.cantidad * precioCarta.fugazzeta_media;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Napolitana") {
-          const costo = producto.cantidad * precioCarta.napolitana;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Napolitana Media") {
-          const costo = producto.cantidad * precioCarta.napolitana_media;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Jamon Especial") {
-          const costo = producto.cantidad * precioCarta.jamonEspecial;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Jamon Especial Media") {
-          const costo = producto.cantidad * precioCarta.jamonEspecial_media;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Roquefort") {
-          const costo = producto.cantidad * precioCarta.roquefort;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Roquefort Media") {
-          const costo = producto.cantidad * precioCarta.roquefort_media;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Tres Quesos") {
-          const costo = producto.cantidad * precioCarta.tresQuesos;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Tres Quesos Media") {
-          const costo = producto.cantidad * precioCarta.tresQuesos_media;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Ananá") {
-          const costo = producto.cantidad * precioCarta.anana;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Ananá Media") {
-          const costo = producto.cantidad * precioCarta.anana_media;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Palmitos") {
-          const costo = producto.cantidad * precioCarta.palmitos;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Palmitos Media") {
-          const costo = producto.cantidad * precioCarta.palmitos_media;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Champignon") {
-          const costo = producto.cantidad * precioCarta.champignon;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Champignon Media") {
-          const costo = producto.cantidad * precioCarta.champignon_media;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Calabresa") {
-          const costo = producto.cantidad * precioCarta.calabresa;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Calabresa Media") {
-          const costo = producto.cantidad * precioCarta.calabresa_media;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Panceta") {
-          const costo = producto.cantidad * precioCarta.panceta;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
-        if (producto.name === "Panceta Media") {
-          const costo = producto.cantidad * precioCarta.panceta_media;
-          total += costo;
-          updateSubtotal(producto.cantidad, producto.name, costo)
-        }
+      }else{
+        const precio = precioCarta.find(p => ((p.name).toUpperCase()).trim() === ((producto.name).toUpperCase()).trim()).costo
+        const costo = producto.cantidad * precio;
+        total += costo;
+        cantidad += producto.cantidad
+        updateSubtotal(producto.cantidad, producto.name, costo)
       }
-    })
+      
+    });
+      
     setTotal(total);
     setCantidadEmpanadas(cantidad);
     setProductos(productos);
@@ -258,7 +86,7 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
 
 
       </Grid>
-      <Accordion sx={{ mt: 2, backgroundColor: "#bf8d72" }}>
+      <Accordion sx={{ mt: 2 }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -275,7 +103,7 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
           </Grid>
         </AccordionDetails>
       </Accordion>
-      <Accordion sx={{ mt: 2 , backgroundColor: "#bf8d72"}}>
+      <Accordion sx={{ mt: 2 }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -287,6 +115,23 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
           <Grid container spacing={3}>
             {Pizzas.map((pizza) => (
               <Producto deleteSubtotal={deleteSubtotal} limpiarProductos={limpiarProductos} setClear={setClear} clear={clear} tipoProducto={"pizza"} key={pizza} name={pizza} productos={productos} setProductos={setProductos} />
+            ))
+            }
+          </Grid>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion sx={{ mt: 2 }}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Bebidas</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Grid container spacing={3}>
+            {Bebidas.map((bebida) => (
+              <Producto deleteSubtotal={deleteSubtotal} limpiarProductos={limpiarProductos} setClear={setClear} clear={clear} tipoProducto={"bebida"} key={bebida} name={bebida} productos={productos} setProductos={setProductos} />
             ))
             }
           </Grid>

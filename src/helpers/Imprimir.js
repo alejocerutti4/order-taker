@@ -22,15 +22,18 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
     const flagEmpanadas = hayTipoProducto(productos, 'empanada');
     const flagSandwichs = hayTipoProducto(productos, 'sandwich');
     const flagPizzas = hayTipoProducto(productos, 'pizza');
+    const flagBebidas = hayTipoProducto(productos, 'bebida');
     const flagNotas = notas.length > 0;
 
     const largoEmpanadas = flagEmpanadas ? 8 : 0;
     const largoSandwichs = flagSandwichs ? 8 : 0;
     const largoPizzas = flagPizzas ? 8 : 0;
+    const largoBebidas = flagBebidas ? 8 : 0;
     const largoNotas = flagNotas ? 8 : 0;
 
     const cantidadKeys = productos.length
-    const alturaTicket = 68 + largoEmpanadas + largoSandwichs + largoPizzas + largoNotas + (cantidadKeys * 3)
+    console.log(cantidadKeys)
+    const alturaTicket = 68 + largoEmpanadas + largoSandwichs + largoPizzas + largoBebidas + largoNotas + (cantidadKeys * 4.5)
     const doc = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
@@ -139,7 +142,31 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
                 if (producto.name.length > 20) {
                     acum += 7;
                 } else {
-                    acum += 3;
+                    acum += 4;
+                }
+            }
+        })
+    }
+
+    if (flagBebidas) {
+        doc.setFontSize(6);
+        doc.text(left, acum, '----------------------------------------------------------');
+        doc.setFontSize(10);
+        doc.text(center + 6, acum + 3, 'Bebidas');
+        doc.setFontSize(6);
+        doc.text(left, acum + 5, '----------------------------------------------------------');
+        acum += 8
+        doc.setFontSize(10);
+        productos.forEach(producto => {
+            if (producto.tipoProducto === 'bebida') {
+                const text = `- ${producto.name}: ${producto.cantidad}`
+                doc.text(left, acum, text, {
+                    maxWidth: 43
+                });
+                if (producto.name.length > 22) {
+                    acum += 7;
+                } else {
+                    acum += 4;
                 }
             }
         })
