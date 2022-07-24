@@ -18,13 +18,22 @@ const parseDate = (value) => {
     }
 };
 
+const ordenarProductosAlfabeticamente = (productos) => {
+    return productos.sort((a, b) => {
+        return a.name.localeCompare(b.name);
+    });
+    
+}
+
 export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas, total) => {
+    
+    // flags para saber el largo del ticket
     const flagEmpanadas = hayTipoProducto(productos, 'empanada');
     const flagSandwichs = hayTipoProducto(productos, 'sandwich');
     const flagPizzas = hayTipoProducto(productos, 'pizza');
     const flagBebidas = hayTipoProducto(productos, 'bebida');
     const flagNotas = notas.length > 0;
-    const flagDireccion = datosCliente.direccion > 0;
+    const flagDireccion = datosCliente.calle.length > 0;
 
     const largoEmpanadas = flagEmpanadas ? 8 : 0;
     const largoSandwichs = flagSandwichs ? 8 : 0;
@@ -34,8 +43,10 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
     const largoDireccion = flagDireccion ? 4 : 0;
 
     const cantidadKeys = productos.length
-    console.log(cantidadKeys)
-    const alturaTicket = 60 + largoEmpanadas + largoDireccion + largoSandwichs + largoPizzas + largoBebidas + largoNotas + (cantidadKeys * 4.5)
+    const alturaTicket = 56 + largoEmpanadas + largoDireccion + largoSandwichs + largoPizzas + largoBebidas + largoNotas + (cantidadKeys * 4.5)
+    
+    const productosOrdenados = ordenarProductosAlfabeticamente(productos);
+
     const doc = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
@@ -50,7 +61,6 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
     doc.addImage('./logo_abuela2.jpg', 'JPG', 8, 5, 38, 10);
     doc.setFontSize(10);
     doc.setFont('helvetica');
-    
 
     doc.setFontSize(6);
     doc.text(left, 20, '----------------------------------------------------------');
@@ -59,11 +69,12 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
     doc.setFontSize(6);
     doc.text(left, 24, '----------------------------------------------------------');
     doc.setFontSize(10);
+    doc.setFont(undefined, 'bold');
     doc.text(left, 27, `Nombre: ${datosCliente.nombre}`);
+    doc.setFont(undefined, 'normal');
 
     let calle = "";
     let ciudad = "";
-    console.log(datosCliente.calle)
     try{
         const array = datosCliente.calle.split('-')
         calle = array[0]
@@ -73,23 +84,35 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
     }
     let acum = 31;
     if(flagDireccion){
+        doc.setFont(undefined, 'bold');
         doc.text(left, 31, `Direccion: ${calle} ${datosCliente.altura} - ${ciudad}`, {
             maxWidth: 44
         });
         acum = 39
+        doc.setFont(undefined, 'normal');
+
     }
     
     if (datosCliente.dpto !== '') {
         doc.text(left, acum, `Dpto: ${datosCliente.dpto}`);
-        doc.text(left, acum + 4, `Telefono: ${datosCliente.telefono}`);
-        doc.text(left, acum + 8, `Hora: ${getHora()}`);
+        if(datosCliente.telefono !== ''){
+            doc.text(left, acum + 4, `Telefono: ${datosCliente.telefono}`);
+            doc.text(left, acum + 8, `Hora: ${getHora()}`);
+            acum += 10;
+        }else{
+            doc.text(left, acum + 4, `Hora: ${getHora()}`);
+            acum += 6;
+        }
 
-        acum += 10;
     } else {
-        doc.text(left, acum, `Telefono: ${datosCliente.telefono}`);
-        doc.text(left, acum + 4, `Hora: ${getHora()}`);
-
-       acum+=6;
+        if(datosCliente.telefono !== ''){
+            doc.text(left, acum, `Telefono: ${datosCliente.telefono}`);
+            doc.text(left, acum + 4, `Hora: ${getHora()}`);
+            acum += 6;
+        }else{
+            doc.text(left, acum, `Hora: ${getHora()}`);
+            acum += 4;
+        }
     }
     
     if (flagEmpanadas) {
@@ -101,7 +124,7 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
         doc.text(left, acum + 5, '----------------------------------------------------------');
         doc.setFontSize(10);
         acum += 8
-        productos.forEach(producto => {
+        productosOrdenados.forEach(producto => {
             if (producto.tipoProducto === 'empanada') {
                 const text = `- ${producto.name}: ${producto.cantidad}`
                 doc.text(left, acum, text)
@@ -121,7 +144,7 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
         doc.text(left, acum + 5, '----------------------------------------------------------');
         acum += 8
         doc.setFontSize(10);
-        productos.forEach(producto => {
+        productosOrdenados.forEach(producto => {
             if (producto.tipoProducto === 'sandwich') {
                 const text = `- ${producto.name}: ${producto.cantidad}`
                 doc.text(left, acum, text)
@@ -138,7 +161,7 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
         doc.text(left, acum + 5, '----------------------------------------------------------');
         acum += 8
         doc.setFontSize(10);
-        productos.forEach(producto => {
+        productosOrdenados.forEach(producto => {
             if (producto.tipoProducto === 'pizza') {
                 const text = `- ${producto.name}: ${producto.cantidad}`
                 doc.text(left, acum, text, {
@@ -162,7 +185,7 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
         doc.text(left, acum + 5, '----------------------------------------------------------');
         acum += 8
         doc.setFontSize(10);
-        productos.forEach(producto => {
+        productosOrdenados.forEach(producto => {
             if (producto.tipoProducto === 'bebida') {
                 const text = `- ${producto.name}: ${producto.cantidad}`
                 doc.text(left, acum, text, {
