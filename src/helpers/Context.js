@@ -1,8 +1,13 @@
 import {createContext} from 'react'
 
-export const PrecioCarta = createContext({
-    precioCarta: {},
-    setPrecioCarta: () => {}
+const PrecioCartaContext = createContext({
+    precioCarta: [],
+    setPrecioCarta: () => []
 });
 
-export default PrecioCarta;
+const PrecioPromocionesContext= createContext({
+    precioPromociones: [],
+    setPrecioPromociones: () => []
+});
+
+export {PrecioCartaContext, PrecioPromocionesContext};

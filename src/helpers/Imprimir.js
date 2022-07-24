@@ -24,16 +24,18 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
     const flagPizzas = hayTipoProducto(productos, 'pizza');
     const flagBebidas = hayTipoProducto(productos, 'bebida');
     const flagNotas = notas.length > 0;
+    const flagDireccion = datosCliente.direccion > 0;
 
     const largoEmpanadas = flagEmpanadas ? 8 : 0;
     const largoSandwichs = flagSandwichs ? 8 : 0;
     const largoPizzas = flagPizzas ? 8 : 0;
     const largoBebidas = flagBebidas ? 8 : 0;
     const largoNotas = flagNotas ? 8 : 0;
+    const largoDireccion = flagDireccion ? 4 : 0;
 
     const cantidadKeys = productos.length
     console.log(cantidadKeys)
-    const alturaTicket = 68 + largoEmpanadas + largoSandwichs + largoPizzas + largoBebidas + largoNotas + (cantidadKeys * 4.5)
+    const alturaTicket = 60 + largoEmpanadas + largoDireccion + largoSandwichs + largoPizzas + largoBebidas + largoNotas + (cantidadKeys * 4.5)
     const doc = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
@@ -45,7 +47,7 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
     const right = 18;
     // Create a template for a receipt
     // An image first
-    doc.addImage('./logo_abuela.jpg', 'JPG', 18, 3, 17, 16);
+    doc.addImage('./logo_abuela2.jpg', 'JPG', 8, 5, 38, 10);
     doc.setFontSize(10);
     doc.setFont('helvetica');
     
@@ -69,22 +71,25 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
     }catch(e){
         calle = datosCliente.calle.label
     }
+    let acum = 31;
+    if(flagDireccion){
+        doc.text(left, 31, `Direccion: ${calle} ${datosCliente.altura} - ${ciudad}`, {
+            maxWidth: 44
+        });
+        acum = 39
+    }
     
-    doc.text(left, 31, `Direccion: ${calle} ${datosCliente.altura} - ${ciudad}`, {
-        maxWidth: 44
-    });
-    let acum;
     if (datosCliente.dpto !== '') {
-        doc.text(left, 39, `Dpto: ${datosCliente.dpto}`);
-        doc.text(left, 43, `Telefono: ${datosCliente.telefono}`);
-        doc.text(left, 47, `Hora: ${getHora()}`);
+        doc.text(left, acum, `Dpto: ${datosCliente.dpto}`);
+        doc.text(left, acum + 4, `Telefono: ${datosCliente.telefono}`);
+        doc.text(left, acum + 8, `Hora: ${getHora()}`);
 
-        acum = 49;
+        acum += 10;
     } else {
-        doc.text(left, 40, `Telefono: ${datosCliente.telefono}`);
-        doc.text(left, 44, `Hora: ${getHora()}`);
+        doc.text(left, acum, `Telefono: ${datosCliente.telefono}`);
+        doc.text(left, acum + 4, `Hora: ${getHora()}`);
 
-        acum = 47;
+       acum+=6;
     }
     
     if (flagEmpanadas) {

@@ -1,41 +1,60 @@
 import React, { useEffect, useContext } from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Grid, Typography } from '@mui/material'
 import Producto from './Producto'
-import Context from '../../helpers/Context';
+import {PrecioCartaContext, PrecioPromocionesContext} from '../../helpers/Context';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import FastfoodIcon from '@mui/icons-material/Fastfood';
+import SportsBarIcon from '@mui/icons-material/SportsBar';
+import LocalPizzaIcon from '@mui/icons-material/LocalPizza';
+import LunchDiningIcon from '@mui/icons-material/LunchDining';
+import { styled } from '@mui/system';
+
+
+const Icon = styled('img')({
+  height:"30px",
+  width: "30px",
+  display: "block"
+});
 
 
 const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantidadEmpanadas, productos, setProductos }) => {
   // const [pedido, setPedido] = useState({});
   const Empanadas = ["Árabes", "Albahaca", "Ananá", "Calabresa", "Carne Picante", "Carne Suave", "Cebolla", "Champignones", "Criolla Dulce", "Criolla Salada", "Gallega", "Humita", "Jamón y Queso", "Palmitos", "Panceta y Ciruela", "Pera", "Pollo", "Pollo Picante", "Puerro", "Roquefort y Apio", "Verdura", "Zapallito"];
-  const Sandwichs = ["Lomo Carne", "Lomo Pollo", "Hambur. Clásica", "Hambur. Americana", "Hambur. Veggie", "Sandwich Milanesa", "Milanesa", "Milanesa Napolitana"];
-  const Pizzas = ["Mozzarella", "Media Mozzarella", "Mozzarella Doble", "Media Mozzarella Doble", "Mozzarella Con Huevo", "Media Mozzarella Con Huevo", "Mozzarella Super", "Media Mozzarella Super", "Fugazzeta", "Media Fugazzeta", "Napolitana", "Media Napolitana", "Jamon Especial", "Media Jamon Especial", "Roquefort", "Media Roquefort", "Tres Quesos", "Media Tres Quesos", "Ananá", "Media Ananá", "Palmitos", "Media Palmitos", "Champignon", "Media Champignon", "Calabresa", "Media Calabresa", "Panceta", "Media Panceta"]
-  const Bebidas = ["Postres", "Coca 500ml", "Coca 1,5L", "Pepsi 1,25L", "Pepsi 2L", "Pepsi 1,5L", "Aquarius 1,5L", "Agua Mineral 1,5L", "Cepita 0,25L", "Brahma 1L", "Quilmes 1L", "Stella 1L", "Quilmes Stout 1L", "Patagonia x710", "Lata Patagonia", "Lata Stella", "Lata Andes", "Lata Quilmes", "Lata Quilmes Sin. Alc", "Lata Quilmes N", "Lata Wolff", "Lata Brahma", "Fernet Branca", "Vino Benjamin Malbec", "Vino Portillo Malbec", "Vino Portillo Pinot Noir", "Vino Flia Gascon Syrah", "Vino Flia Gascon Malbec", "Vino Los Cardos ", "Vino Vive Malbec", "Vino Andeluna Raices", "Vino Santa Julia Malbec Orgánico", "Vino Cordero con Piel de Lobo", "Vino De Moño Rojo Blanco", "Vino De Moño Rojo Malbec", "Vino Cafayate Malbec", "Vino Asado Club Malbec", "Vino Jean Rivier Malbec", "Vino Jean Rivier Rosado", "Vino Callia Alta Malbec ", "Vino Domingo Hnos Otoñal", "Vino LP Partridge Malbec", "Vino LP Partridge Red Blend", "Vino Laureano Gomez Rosado"];
-  const { precioCarta } = useContext(Context)
+ 
+  const { precioCarta } = useContext(PrecioCartaContext)
+  const { precioPromociones } = useContext(PrecioPromocionesContext)
 
-
+  const Sandwichs = precioCarta.filter(precio => precio.tipo === "sandwich").map(precio => precio.name);
+  const Pizzas = precioCarta.filter(precio => precio.tipo === "pizza").map(precio => precio.name);
+  const Bebidas = precioCarta.filter(precio => precio.tipo === "bebida").map(precio => precio.name);
+  const precioEmpanada = precioCarta.find(p => ((p.name).toUpperCase()).trim() === (("Empanadas").toUpperCase()).trim()).costo
+  const precioDocena = precioPromociones.find(p => ((p.name).toUpperCase()).trim() === (("Docena").toUpperCase()).trim()).costo
   useEffect(() => {
     let total = 0;
+    let totalEmpanadas = 0;
+    let totalOtros = 0;
     let cantidad = 0;
-    console.log(precioCarta);
     productos.forEach(producto => {
       if(producto.tipoProducto === "empanada"){
-        const precio = precioCarta.find(p => ((p.name).toUpperCase()).trim() === (("Empanadas").toUpperCase()).trim()).costo
-        const costo = producto.cantidad * precio;
-        total += costo;
         cantidad += producto.cantidad
-        updateSubtotal(producto.cantidad, producto.name, costo)
+        updateSubtotal(producto.cantidad, producto.name, producto.cantidad * precioEmpanada)
       }else{
         const precio = precioCarta.find(p => ((p.name).toUpperCase()).trim() === ((producto.name).toUpperCase()).trim()).costo
         const costo = producto.cantidad * precio;
-        total += costo;
-        cantidad += producto.cantidad
+        totalOtros += costo;
         updateSubtotal(producto.cantidad, producto.name, costo)
       }
       
     });
-      
+
+    
+    if(cantidad >= 12){
+      const docenas = Math.floor(cantidad / 12);
+      const sobrante = cantidad - (docenas*12)
+      totalEmpanadas = docenas*precioDocena + sobrante*precioEmpanada;      
+    }else{
+      totalEmpanadas = cantidad * precioEmpanada;
+    }
+    total = totalEmpanadas + totalOtros;
     setTotal(total);
     setCantidadEmpanadas(cantidad);
     setProductos(productos);
@@ -74,9 +93,9 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
     <>
       <div style={{display: "flex", alignItems: "center"}}>
         <Typography sx={{ mt: 2 }} variant="h6" gutterBottom>
-          Productos
+          Empanadas
         </Typography>
-        <FastfoodIcon sx={{ml:1, marginTop: "2px"}}/>
+        <Icon sx={{marginTop:"6px"}} src="./empanada.png" alt="icon"/>
       </div>
       <Grid container spacing={3}>
         {Empanadas.map((empanada) => (
@@ -92,7 +111,10 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Sandwichs</Typography>
+          <div style={{display:"flex", alignItems: "center"}}>
+            <Typography>Sandwichs</Typography>
+            <LunchDiningIcon/>
+          </div>
         </AccordionSummary>
         <AccordionDetails>
           <Grid container spacing={3}>
@@ -109,7 +131,10 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Pizzas</Typography>
+          <div style={{display:"flex", alignItems: "center"}}>
+            <Typography>Pizzas</Typography>
+            <LocalPizzaIcon/>
+          </div>
         </AccordionSummary>
         <AccordionDetails>
           <Grid container spacing={3}>
@@ -126,7 +151,10 @@ const Productos = ({ subTotal, setSubTotal, clear, setClear, setTotal, setCantid
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Bebidas</Typography>
+          <div style={{display:"flex", alignItems: "center"}}>
+            <Typography>Bebidas</Typography>
+            <SportsBarIcon/>
+          </div>
         </AccordionSummary>
         <AccordionDetails>
           <Grid container spacing={3}>

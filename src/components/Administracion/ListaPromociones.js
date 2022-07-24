@@ -1,10 +1,12 @@
-import { useState, useContext, useEffect } from 'react';
-import { Grid, List, ListItem, ListItemIcon, ListItemText, Typography, Modal, Box, Button, TextField } from '@mui/material'
 import styled from '@emotion/styled';
-import {PrecioCartaContext} from '../../helpers/Context';
+import { Button, Grid, List, ListItem, ListItemIcon, ListItemText, Modal, TextField, Typography } from '@mui/material';
+import React, { useContext, useState } from 'react'
+import RestaurantIcon from '@mui/icons-material/Restaurant';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
-import RestaurantIcon from '@mui/icons-material/Restaurant';
+import { PrecioPromocionesContext } from '../../helpers/Context';
+import { Box } from '@mui/system';
+
 const Demo = styled('div')({
     backgroundColor: '#f2b705',
 });
@@ -15,53 +17,50 @@ const style = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
-    bgcolor: 'background.paper',
+    bgcolor: 'white',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
 };
 
-const ListaProductos = () => {
-    const { precioCarta, setPrecioCarta } = useContext(PrecioCartaContext)
+const ListaPromociones = () => {
+    const { precioPromociones, setPrecioPromociones } = useContext(PrecioPromocionesContext)
     const [open, setOpen] = useState(false);
     const [textoModal, setTextoModal] = useState({ value: '', precio: 0});
-
     const handleOpen = (value, precio) => {
         setOpen(true)
         setTextoModal({ value, precio })
     };
     const handleClose = () => setOpen(false);
     const actualizarPrecio = () => {
-        let objectIndex = precioCarta.findIndex((p => p.name === textoModal.value));
-        precioCarta[objectIndex].costo = textoModal.precio;
-        setPrecioCarta([...precioCarta])
+        let objectIndex = precioPromociones.findIndex((p => p.name === textoModal.value));
+        precioPromociones[objectIndex].costo = textoModal.precio;
+        setPrecioPromociones([...precioPromociones])
         setTextoModal({ value: '', precio: 0})
         handleClose()
     }
 
-    useEffect(() => {
-        console.log(precioCarta)
-    }, [precioCarta])
+   
 
 
     return (
         <Grid item xs={12} md={6}>
             <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-                Lista de productos
+                Lista de promociones
             </Typography>
             <Demo>
                 <List sx={{ backgroundColor: "white" }}>
 
                     {
-                        precioCarta.map(producto => {
+                        precioPromociones.map(producto => {
                             return (
-                                <ListItem>
+                                <ListItem key={producto.name}>
                                     <ListItemIcon>
                                         <RestaurantIcon />
                                     </ListItemIcon>
                                     <ListItemText
-                                        primary={producto.name}
-                                        secondary={'$' + producto.costo}
+                                        primary={`${producto.name} \n- ${producto.descripcion}`}
+                                        secondary={`$ ${producto.costo}`}
                                     />
                                     <Button variant="contained" sx={{ backgroundColor: "#FFC000", '&:hover': { backgroundColor: '#f2b705' } }} onClick={() => handleOpen(producto.name, producto.costo)}>Editar <EditIcon /> </Button>
 
@@ -94,4 +93,5 @@ const ListaProductos = () => {
     )
 }
 
-export default ListaProductos
+
+export default ListaPromociones

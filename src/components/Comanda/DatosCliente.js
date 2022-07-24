@@ -48,7 +48,7 @@ const DatosCliente = ({datosCliente, setDatosCliente}) => {
 
                     />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item sm={6} xs={12}>
                     <Autocomplete
                         disablePortal
                         value={datosCliente.calle}
@@ -60,7 +60,7 @@ const DatosCliente = ({datosCliente, setDatosCliente}) => {
 
                     />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item sm={4} xs={8}>
                     <TextField
                         id="altura"
                         name="altura"
@@ -74,7 +74,7 @@ const DatosCliente = ({datosCliente, setDatosCliente}) => {
 
                     />
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item sm={2} xs={4}>
                     <TextField
                         id="dpto"
                         name="dpto"
