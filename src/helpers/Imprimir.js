@@ -82,12 +82,19 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
     }catch(e){
         calle = datosCliente.calle.label
     }
+    const altura = datosCliente.altura;
     let acum = 31;
     if(flagDireccion){
         doc.setFont(undefined, 'bold');
-        doc.text(left, 31, `Direccion: ${calle} ${datosCliente.altura} - ${ciudad}`, {
-            maxWidth: 44
-        });
+        if(altura !== ""){
+            doc.text(left, 31, `Direccion: ${calle} ${datosCliente.altura} - ${ciudad}`, {
+                maxWidth: 44
+            });
+        }else{
+            doc.text(left, 31, `Direccion: ${calle}`, {
+                maxWidth: 44
+            });
+        }
         acum = 39
         doc.setFont(undefined, 'normal');
 
