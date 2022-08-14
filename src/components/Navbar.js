@@ -85,7 +85,7 @@ const Navbar = () => {
                                                     <ListItemIcon>
                                                         <LabelImportantIcon sx={{color: "white"}} />
                                                     </ListItemIcon>
-                                                    <Link onClick={handleClose} style={{ textDecoration: 'inherit' }} to="/">
+                                                    <Link onClick={handleClose} style={{ textDecoration: 'inherit' }} to="/home">
                                                         <ListItemText sx={{color: "white"}} primary="Comanda" />
                                                     </Link>
                                                     </ListItemButton>

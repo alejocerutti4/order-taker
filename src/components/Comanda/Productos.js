@@ -15,7 +15,8 @@ import SportsBarIcon from "@mui/icons-material/SportsBar";
 import LocalPizzaIcon from "@mui/icons-material/LocalPizza";
 import LunchDiningIcon from "@mui/icons-material/LunchDining";
 import { styled } from "@mui/system";
-import { getAllProductos } from "../../services/api";
+import { getAllProductos } from "../../services/api"; 
+import { useNavigate } from "react-router-dom";
 
 const Icon = styled("img")({
   height: "30px",
@@ -66,27 +67,35 @@ const Productos = ({
   const [precioEmpanada, setPrecioEmpanada] = useState(0);
   const [precioDocena, setPrecioDocena] = useState(0);
   const { precioPromociones } = useContext(PrecioPromocionesContext);
-
+  const navigate = useNavigate();
   const getProductos = async () => {
-    const productos = await getAllProductos();
-    console.log(productos);
-    setPrecioCarta(productos);
-    setLoading(false);
-    setSandwichs(precioCarta
-    .filter((precio) => precio.tipo === "sandwich")
-    .map((precio) => precio.name));
-    setPizzas( precioCarta
-      .filter((precio) => precio.tipo === "pizza")
+    try{
+      const productos = await getAllProductos();
+      console.log(productos);
+      setPrecioCarta(productos);
+      setLoading(false);
+      setSandwichs(precioCarta
+      .filter((precio) => precio.tipo === "sandwich")
       .map((precio) => precio.name));
-    setBebidas(precioCarta
-      .filter((precio) => precio.tipo === "bebida")
-      .map((precio) => precio.name));
-    setPrecioEmpanada(precioCarta.find(
-      (p) => p.name.toUpperCase().trim() === "Empanadas".toUpperCase().trim()
-    ).costo);
-    setPrecioDocena(precioPromociones.find(
-      (p) => p.name.toUpperCase().trim() === "Docena".toUpperCase().trim()
-    ).costo);
+      setPizzas( precioCarta
+        .filter((precio) => precio.tipo === "pizza")
+        .map((precio) => precio.name));
+      setBebidas(precioCarta
+        .filter((precio) => precio.tipo === "bebida")
+        .map((precio) => precio.name));
+      setPrecioEmpanada(precioCarta.find(
+        (p) => p.name.toUpperCase().trim() === "Empanadas".toUpperCase().trim()
+      ).costo);
+      setPrecioDocena(precioPromociones.find(
+        (p) => p.name.toUpperCase().trim() === "Docena".toUpperCase().trim()
+      ).costo);
+    }catch(e){
+      if(e.response.status === 401){
+        localStorage.removeItem("email");
+        localStorage.removeItem("token");
+        navigate("/");
+      }
+    }
     
   };
 
