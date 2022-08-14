@@ -34,20 +34,16 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showError, setShowError] = useState(false);
   const navigate = useNavigate();
-  useEffect(()=> {
-    if(localStorage.getItem("token") && localStorage.getItem("email")) {
-      navigate("/home");
-    }
-  })
+
   
   const iniciarSesion = async () => {
     const response = await logIn(email, password);
     if(response.status === 200){
+        navigate("/home");   
         localStorage.setItem("email", email);
         localStorage.setItem("token", response.data.token);
         setEmail("");	
         setPassword("");
-        navigate("/home");   
     }else{
         setShowError(true);
     }

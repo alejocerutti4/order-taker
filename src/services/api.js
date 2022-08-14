@@ -12,6 +12,16 @@ const getAllProductos = async () => {
     return response.data;
 }
 
+const updateProducto = async (producto, id) => {
+    const token = localStorage.getItem("token");
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    };
+    const response = await axios.put(url + "productos/" + id, producto, { headers });
+    return response;
+}
+
 const logIn = async (email, password) => {
     try{
         const response = await axios.post(url + "login", { email, password });
@@ -20,5 +30,5 @@ const logIn = async (email, password) => {
         return e.response;
     }
 }
-export { getAllProductos, logIn };
+export { getAllProductos, updateProducto, logIn };
 

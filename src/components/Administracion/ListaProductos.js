@@ -1,10 +1,13 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Grid, List, ListItem, ListItemIcon, ListItemText, Typography, Modal, Box, Button, TextField } from '@mui/material'
 import styled from '@emotion/styled';
-import {PrecioCartaContext} from '../../helpers/Context';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
+import Loader from '../Loader';
+import { getAllProductos, updateProducto } from '../../services/api';
+import { SyncLoader } from 'react-spinners';
+
 const Demo = styled('div')({
     backgroundColor: '#f2b705',
 });
@@ -22,75 +25,109 @@ const style = {
 };
 
 const ListaProductos = () => {
-    const { precioCarta, setPrecioCarta } = useContext(PrecioCartaContext)
     const [open, setOpen] = useState(false);
-    const [textoModal, setTextoModal] = useState({ value: '', precio: 0});
+    const [textoModal, setTextoModal] = useState({ value: '', precio: 0, tipo: '', id: ''});
+    const [productos, setProductos] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [spinner, setSpinner] = useState(false);
 
-    const handleOpen = (value, precio) => {
+    const handleOpen = (value, precio, tipo, id) => {
         setOpen(true)
-        setTextoModal({ value, precio })
+        setTextoModal({ value, precio, tipo, id })
     };
     const handleClose = () => setOpen(false);
-    const actualizarPrecio = () => {
-        let objectIndex = precioCarta.findIndex((p => p.name === textoModal.value));
-        precioCarta[objectIndex].costo = textoModal.precio;
-        setPrecioCarta([...precioCarta])
-        setTextoModal({ value: '', precio: 0})
+    const actualizarPrecio = async () => {
+        let objectIndex = productos.findIndex((p => p.id === textoModal.id));
+        productos[objectIndex].costo = textoModal.precio;
+        setProductos([...productos])
+        const producto = {
+            name: textoModal.value,
+            costo: textoModal.precio,
+            tipo: textoModal.tipo,
+        }
+        setSpinner(true);
+        try{
+            await updateProducto(producto, textoModal.id);
+        }catch(e){
+            console.log(e);
+        }finally{
+            setSpinner(false);
+        }
         handleClose()
+        setTextoModal({ value: '', precio: 0, tipo: '', id: ''})
+
     }
 
-    useEffect(() => {
-        console.log(precioCarta)
-    }, [precioCarta])
+    const getProductos = async () => {
+        try {
+          const data = await getAllProductos();
+          setProductos(data);
+        }catch(e){
+            console.log(e)
+        }
+        finally {
+          setLoading(false);
+        }
+      };
+
+    useEffect(()=>{
+        getProductos()
+    }, [])
 
 
     return (
-        <Grid item xs={12} md={6}>
-            <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-                Lista de productos
-            </Typography>
-            <Demo>
-                <List sx={{ backgroundColor: "white" }}>
-
-                    {
-                        precioCarta.map(producto => {
-                            return (
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <RestaurantIcon />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary={producto.name}
-                                        secondary={'$' + producto.costo}
-                                    />
-                                    <Button variant="contained" sx={{ backgroundColor: "#FFC000", '&:hover': { backgroundColor: '#f2b705' } }} onClick={() => handleOpen(producto.name, producto.costo)}>Editar <EditIcon /> </Button>
-
-                                </ListItem>
-
-                            )
-                        })
-                    }
-
-
-                </List>
-            </Demo>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        {textoModal.value}
+        
+            loading ? 
+            <Loader/>
+            :
+            
+                <Grid item xs={12} md={6}>
+                    <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+                        Lista de productos
                     </Typography>
-                    <Box sx={{ display: 'flex' }}>
-                        <TextField id="standard-basic" onChange={(e) => setTextoModal({ ...textoModal, precio: e.target.value })} value={textoModal.precio} variant="standard" />
-                        <Button sx={{ ml: 2 }} onClick={actualizarPrecio} color="primary" variant="contained">Confirmar<CheckIcon /></Button>
-                    </Box>
-                </Box>
-            </Modal>
-        </Grid>
+                    <Demo>
+                        <List sx={{ backgroundColor: "white" }}>
+
+                            {
+                                productos.map(producto => {
+                                    return (
+                                        <ListItem key={producto.id}>
+                                            <ListItemIcon>
+                                                <RestaurantIcon />
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={producto.name}
+                                                secondary={'$' + producto.costo}
+                                            />
+                                            <Button variant="contained" sx={{ backgroundColor: "#FFC000", '&:hover': { backgroundColor: '#f2b705' } }} onClick={() => handleOpen(producto.name, producto.costo, producto.tipo, producto.id)}>Editar <EditIcon /> </Button>
+
+                                        </ListItem>
+
+                                    )
+                                })
+                            }
+
+
+                        </List>
+                    </Demo>
+                    <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={style}>
+                            <Typography id="modal-modal-title" variant="h6" component="h2">
+                                {textoModal.value}
+                            </Typography>
+                            <Box sx={{ display: 'flex' }}>
+                                <TextField id="standard-basic" onChange={(e) => setTextoModal({ ...textoModal, precio: e.target.value })} value={textoModal.precio} variant="standard" />
+                                <Button sx={{ ml: 2 }} onClick={actualizarPrecio} color="primary" variant="contained">Confirmar{!spinner ? <CheckIcon /> : <SyncLoader size={5} color="#ffffff" />}</Button>
+                            </Box>
+                        </Box>
+                    </Modal>
+                </Grid>
+            
     )
 }
 

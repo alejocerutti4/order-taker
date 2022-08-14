@@ -7,17 +7,16 @@ import {
   Typography,
 } from "@mui/material";
 import Producto from "./Producto";
-import {
-  PrecioPromocionesContext,
-} from "../../helpers/Context";
+import { PrecioPromocionesContext } from "../../helpers/Context";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SportsBarIcon from "@mui/icons-material/SportsBar";
 import LocalPizzaIcon from "@mui/icons-material/LocalPizza";
 import LunchDiningIcon from "@mui/icons-material/LunchDining";
 import { styled } from "@mui/system";
-import { getAllProductos } from "../../services/api"; 
+import { getAllProductos } from "../../services/api";
 import { useNavigate } from "react-router-dom";
-
+import Loader  from "../Loader";
+import { LogueadoContext } from "../../helpers/Context";
 const Icon = styled("img")({
   height: "30px",
   width: "30px",
@@ -60,49 +59,65 @@ const Productos = ({
   ];
 
   const [precioCarta, setPrecioCarta] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [Sandwichs, setSandwichs] = useState([]);
   const [Pizzas, setPizzas] = useState([]);
   const [Bebidas, setBebidas] = useState([]);
   const [precioEmpanada, setPrecioEmpanada] = useState(0);
   const [precioDocena, setPrecioDocena] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const { setIsLogged } = useContext(LogueadoContext);
+
   const { precioPromociones } = useContext(PrecioPromocionesContext);
   const navigate = useNavigate();
+
   const getProductos = async () => {
-    try{
+    try {
       const productos = await getAllProductos();
-      console.log(productos);
       setPrecioCarta(productos);
-      setLoading(false);
-      setSandwichs(precioCarta
-      .filter((precio) => precio.tipo === "sandwich")
-      .map((precio) => precio.name));
-      setPizzas( precioCarta
-        .filter((precio) => precio.tipo === "pizza")
-        .map((precio) => precio.name));
-      setBebidas(precioCarta
-        .filter((precio) => precio.tipo === "bebida")
-        .map((precio) => precio.name));
-      setPrecioEmpanada(precioCarta.find(
-        (p) => p.name.toUpperCase().trim() === "Empanadas".toUpperCase().trim()
-      ).costo);
-      setPrecioDocena(precioPromociones.find(
-        (p) => p.name.toUpperCase().trim() === "Docena".toUpperCase().trim()
-      ).costo);
-    }catch(e){
-      if(e.response.status === 401){
+      setIsLogged(true);
+      setSandwichs(
+        productos
+          .filter((precio) => precio.tipo === "sandwich")
+          .map((precio) => precio.name)
+      );
+      setPizzas(
+        productos
+          .filter((precio) => precio.tipo === "pizza")
+          .map((precio) => precio.name)
+      );
+      setBebidas(
+        productos
+          .filter((precio) => precio.tipo === "bebida")
+          .map((precio) => precio.name)
+      );
+      setPrecioEmpanada(
+        productos.find(
+          (p) =>
+            p.name.toUpperCase().trim() === "Empanadas".toUpperCase().trim()
+        ).costo
+      );
+      setPrecioDocena(
+        precioPromociones.find(
+          (p) => p.name.toUpperCase().trim() === "Docena".toUpperCase().trim()
+        ).costo
+      );
+    } catch (e) {
+      console.log(e);
+      if (e.response?.status === 401) {
         localStorage.removeItem("email");
         localStorage.removeItem("token");
+        setIsLogged(false);
         navigate("/");
       }
     }
-    
+    finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     getProductos();
   }, []);
-  
 
   useEffect(() => {
     let total = 0;
@@ -172,9 +187,7 @@ const Productos = ({
   };
   return (
     <>
-      {loading ? (
-        <div>Cargando...</div>
-      ) : (
+      {loading ? (<Loader/>):(
         <>
           <div style={{ display: "flex", alignItems: "center" }}>
             <Typography sx={{ mt: 2 }} variant="h6" gutterBottom>
@@ -197,93 +210,97 @@ const Productos = ({
               />
             ))}
           </Grid>
-          <Accordion sx={{ mt: 2 }}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Typography>Sandwichs</Typography>
-                <LunchDiningIcon />
-              </div>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container spacing={3}>
-                {Sandwichs.map((sandwich) => (
-                  <Producto
-                    deleteSubtotal={deleteSubtotal}
-                    limpiarProductos={limpiarProductos}
-                    setClear={setClear}
-                    clear={clear}
-                    tipoProducto={"sandwich"}
-                    key={sandwich}
-                    name={sandwich}
-                    productos={productos}
-                    setProductos={setProductos}
-                  />
-                ))}
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion sx={{ mt: 2 }}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Typography>Pizzas</Typography>
-                <LocalPizzaIcon />
-              </div>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container spacing={3}>
-                {Pizzas.map((pizza) => (
-                  <Producto
-                    deleteSubtotal={deleteSubtotal}
-                    limpiarProductos={limpiarProductos}
-                    setClear={setClear}
-                    clear={clear}
-                    tipoProducto={"pizza"}
-                    key={pizza}
-                    name={pizza}
-                    productos={productos}
-                    setProductos={setProductos}
-                  />
-                ))}
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion sx={{ mt: 2 }}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Typography>Bebidas</Typography>
-                <SportsBarIcon />
-              </div>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid container spacing={3}>
-                {Bebidas.map((bebida) => (
-                  <Producto
-                    deleteSubtotal={deleteSubtotal}
-                    limpiarProductos={limpiarProductos}
-                    setClear={setClear}
-                    clear={clear}
-                    tipoProducto={"bebida"}
-                    key={bebida}
-                    name={bebida}
-                    productos={productos}
-                    setProductos={setProductos}
-                  />
-                ))}
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
+          {!loading && (
+            <>
+              <Accordion sx={{ mt: 2 }}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <Typography>Sandwichs</Typography>
+                    <LunchDiningIcon />
+                  </div>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container spacing={3}>
+                    {Sandwichs.map((sandwich) => (
+                      <Producto
+                        deleteSubtotal={deleteSubtotal}
+                        limpiarProductos={limpiarProductos}
+                        setClear={setClear}
+                        clear={clear}
+                        tipoProducto={"sandwich"}
+                        key={sandwich}
+                        name={sandwich}
+                        productos={productos}
+                        setProductos={setProductos}
+                      />
+                    ))}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+              <Accordion sx={{ mt: 2 }}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <Typography>Pizzas</Typography>
+                    <LocalPizzaIcon />
+                  </div>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container spacing={3}>
+                    {Pizzas.map((pizza) => (
+                      <Producto
+                        deleteSubtotal={deleteSubtotal}
+                        limpiarProductos={limpiarProductos}
+                        setClear={setClear}
+                        clear={clear}
+                        tipoProducto={"pizza"}
+                        key={pizza}
+                        name={pizza}
+                        productos={productos}
+                        setProductos={setProductos}
+                      />
+                    ))}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+              <Accordion sx={{ mt: 2 }}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <Typography>Bebidas</Typography>
+                    <SportsBarIcon />
+                  </div>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container spacing={3}>
+                    {Bebidas.map((bebida) => (
+                      <Producto
+                        deleteSubtotal={deleteSubtotal}
+                        limpiarProductos={limpiarProductos}
+                        setClear={setClear}
+                        clear={clear}
+                        tipoProducto={"bebida"}
+                        key={bebida}
+                        name={bebida}
+                        productos={productos}
+                        setProductos={setProductos}
+                      />
+                    ))}
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </>
+          )}
         </>
       )}
     </>

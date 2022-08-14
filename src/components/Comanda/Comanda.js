@@ -17,7 +17,7 @@ import imprimirPedido from '../../helpers/Imprimir';
 
 const theme = createTheme();
 
-export default function Checkout() {
+const Comanda = ({setIsLogged, setLoading, loading}) => {
 
   const [total, setTotal] = useState(0);
   const [subTotal, setSubTotal] = useState([]);
@@ -65,7 +65,7 @@ export default function Checkout() {
           <React.Fragment>
 
             <DatosCliente datosCliente={datosCliente} setDatosCliente={setDatosCliente} />
-            <Productos subTotal={subTotal} setSubTotal={setSubTotal} clear={clear} setClear={setClear} setTotal={setTotal} setCantidadEmpanadas={setCantidadEmpanadas} productos={productos} setProductos={setProductos} />
+            <Productos loading={loading} setIsLogged={setIsLogged} setLoading={setLoading} subTotal={subTotal} setSubTotal={setSubTotal} clear={clear} setClear={setClear} setTotal={setTotal} setCantidadEmpanadas={setCantidadEmpanadas} productos={productos} setProductos={setProductos} />
             <div style={{ display: "flex" }}>
               <Typography component="h1" variant="h5" sx={{ mt: 2 }} align="left">Notas</Typography>
               <CreateIcon sx={{ marginTop: "18px", marginLeft: "6px" }} />
@@ -107,3 +107,5 @@ export default function Checkout() {
     </ThemeProvider>
   );
 }
+
+export default Comanda;

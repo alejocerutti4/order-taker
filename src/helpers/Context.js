@@ -10,4 +10,9 @@ const PrecioPromocionesContext= createContext({
     setPrecioPromociones: () => []
 });
 
-export {PrecioCartaContext, PrecioPromocionesContext};
+const LogueadoContext = createContext({
+    isLogged: false,
+    setIsLogged: () => false  
+});
+
+export {PrecioCartaContext, PrecioPromocionesContext, LogueadoContext};

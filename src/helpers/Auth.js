@@ -3,3 +3,4 @@ export const isLoggedIn = () => {
     const email = localStorage.getItem("email") ? true : false;
     return token && email;
 }
+

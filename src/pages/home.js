@@ -1,11 +1,11 @@
-import React from 'react'
-import Comanda from '../components/Comanda/Comanda'
+import React from "react";
+import Comanda from "../components/Comanda/Comanda";
 
+const Home = ({ setIsLogged }) => {
 
-const Home = () => {
   return (
-    <Comanda />
-  )
-}
+    <Comanda setIsLogged={setIsLogged} />
+  );
+};
 
-export default Home
+export default Home;

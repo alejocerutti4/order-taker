@@ -1,58 +1,97 @@
-import React, { useState, useEffect } from 'react'
-import Copyright from './components/Copyright.js'
-import Navbar from './components/Navbar.js'
-import ProtectedRoute from './components/Redirect/ProtectedRoute.js'
-import HomeRedirect from './components/Redirect/HomeRedirect.js'
-import Home from './pages/home.js'
-import { Route, BrowserRouter, Routes } from 'react-router-dom';
-import AdministracionProductos from './pages/administracion_productos.js'
-import Promociones from './pages/promociones.js'
-import { PrecioPromocionesContext } from './helpers/Context.js'
-import { tablaPromociones } from './utils/TablaProductos.js'
-import './App.css';
-import Login from './pages/login.js';
+import React, { useState, useEffect } from "react";
+import Copyright from "./components/Copyright.js";
+import Navbar from "./components/Navbar.js";
+import ProtectedRoute from "./components/Redirect/ProtectedRoute.js";
+import HomeRedirect from "./components/Redirect/HomeRedirect.js";
+import Home from "./pages/home.js";
+import { Route, BrowserRouter, Routes } from "react-router-dom";
+import AdministracionProductos from "./pages/administracion_productos.js";
+import Promociones from "./pages/promociones.js";
+import {
+  PrecioPromocionesContext,
+  LogueadoContext,
+} from "./helpers/Context.js";
+import { tablaPromociones } from "./utils/TablaProductos.js";
+import "./App.css";
+import Login from "./pages/login.js";
 
 const App = () => {
-
   const [precioPromociones, setPrecioPromociones] = useState(tablaPromociones);
   const [isLogged, setIsLogged] = useState(false);
-  const promos = { precioPromociones, setPrecioPromociones }
+
+  const promos = { precioPromociones, setPrecioPromociones };
+  const logueado = { isLogged, setIsLogged };
 
   useEffect(() => {
     if (localStorage.getItem("token") && localStorage.getItem("email")) {
       setIsLogged(true);
-    }else{
+    } else {
       setIsLogged(false);
     }
-  })
-
- 
+  });
 
   return (
     <PrecioPromocionesContext.Provider value={promos}>
+      <LogueadoContext.Provider value={logueado}>
         <BrowserRouter>
           <div className="App">
-            {isLogged && <Navbar /> }
+            {isLogged && <Navbar />}
             <Routes>
-              <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-              <Route path="/administracion-productos" element={<ProtectedRoute><AdministracionProductos /></ProtectedRoute>} />
-              <Route path="/promociones" element={<ProtectedRoute><Promociones /></ProtectedRoute>} />
-              <Route path="/login" element={<HomeRedirect><Login/></HomeRedirect>} />
-              <Route path="/" element={<HomeRedirect><Login/></HomeRedirect>} />
-              <Route path="*" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+              <Route
+                path="/home"
+                element={
+                  <ProtectedRoute>
+                    <Home setIsLogged={setIsLogged} />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/administracion-productos"
+                element={
+                  <ProtectedRoute>
+                    <AdministracionProductos />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/promociones"
+                element={
+                  <ProtectedRoute>
+                    <Promociones />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/login"
+                element={
+                  <HomeRedirect>
+                    <Login />
+                  </HomeRedirect>
+                }
+              />
+              <Route
+                path="/"
+                element={
+                  <HomeRedirect>
+                    <Login />
+                  </HomeRedirect>
+                }
+              />
+              <Route
+                path="*"
+                element={
+                  <ProtectedRoute>
+                    <Home setIsLogged={setIsLogged} />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
             {isLogged && <Copyright />}
           </div>
-        </BrowserRouter >
+        </BrowserRouter>
+      </LogueadoContext.Provider>
     </PrecioPromocionesContext.Provider>
-  )
-}
+  );
+};
 
-export default App
-
-
-
-
-
-
-
+export default App;
