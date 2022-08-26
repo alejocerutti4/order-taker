@@ -7,6 +7,7 @@ import RestaurantIcon from '@mui/icons-material/Restaurant';
 import Loader from '../Loader';
 import { getAllProductos, updateProducto } from '../../services/api';
 import { SyncLoader } from 'react-spinners';
+import { ordenarProductos } from '../../helpers/OrdenarProductos';
 
 const Demo = styled('div')({
     backgroundColor: '#f2b705',
@@ -61,7 +62,8 @@ const ListaProductos = () => {
     const getProductos = async () => {
         try {
           const data = await getAllProductos();
-          setProductos(data);
+          const ordenados = ordenarProductos(data);
+          setProductos(ordenados);
         }catch(e){
             console.log(e)
         }

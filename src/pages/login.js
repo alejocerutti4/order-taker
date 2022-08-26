@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { PulseLoader } from "react-spinners";
+
 import {
   Alert,
   Avatar,
@@ -33,10 +35,12 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   
   const iniciarSesion = async () => {
+    setLoading(true);
     const response = await logIn(email, password);
     if(response.status === 200){
         navigate("/home");   
@@ -47,6 +51,8 @@ const Login = () => {
     }else{
         setShowError(true);
     }
+    setLoading(false);
+
   }
   return (
     <Grid
@@ -67,6 +73,7 @@ const Login = () => {
         <TextField
           label="Email"
           placeholder="Ingresar email"
+          type="email"
           variant="outlined"
           fullWidth
           onChange={(e) => setEmail(e.target.value)}
@@ -116,7 +123,7 @@ const Login = () => {
           fullWidth
           onClick={iniciarSesion}
         >
-          Iniciar sesión
+          { !loading ? "Iniciar sesión": <PulseLoader color="#ffffff" size={10}/> }
         </Button>
       </Paper>
     </Grid>

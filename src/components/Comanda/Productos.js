@@ -17,6 +17,7 @@ import { getAllProductos } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import Loader  from "../Loader";
 import { LogueadoContext } from "../../helpers/Context";
+import { ordenarSandwichs, ordenarPizzas, ordenarBebidas } from "../../helpers/OrdenarProductos";
 const Icon = styled("img")({
   height: "30px",
   width: "30px",
@@ -75,20 +76,17 @@ const Productos = ({
       const productos = await getAllProductos();
       setPrecioCarta(productos);
       setIsLogged(true);
+      const sandwichs = productos.filter((precio) => precio.tipo === "sandwich").map((precio) => precio.name)
       setSandwichs(
-        productos
-          .filter((precio) => precio.tipo === "sandwich")
-          .map((precio) => precio.name)
+        ordenarSandwichs(sandwichs)
       );
+      const pizzas = productos.filter((precio) => precio.tipo === "pizza").map((precio) => precio.name)
       setPizzas(
-        productos
-          .filter((precio) => precio.tipo === "pizza")
-          .map((precio) => precio.name)
+        ordenarPizzas(pizzas)
       );
+      const bebidas = productos.filter((precio) => precio.tipo === "bebida").map((precio) => precio.name)
       setBebidas(
-        productos
-          .filter((precio) => precio.tipo === "bebida")
-          .map((precio) => precio.name)
+        ordenarBebidas(bebidas)
       );
       setPrecioEmpanada(
         productos.find(
