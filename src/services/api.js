@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "https://secure-river-58529.herokuapp.com/api/v1/";
+const url = "https://laabuela-api-production.up.railway.app/api/v1/";
 
 const getAllProductos = async () => {
     const token = localStorage.getItem("token");
