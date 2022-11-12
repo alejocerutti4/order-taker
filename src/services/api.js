@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "http://54.207.49.31:8080/api/v1/";
+const url = "https://laabuela-api.onrender.com/api/v1/";
 
 const getAllProductos = async () => {
     const token = localStorage.getItem("token");
