@@ -31,7 +31,7 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
     const flagEmpanadas = hayTipoProducto(productos, 'empanada');
     const flagSandwichs = hayTipoProducto(productos, 'sandwich');
     const flagPizzas = hayTipoProducto(productos, 'pizza');
-    const flagBebidas = hayTipoProducto(productos, 'bebida');
+    const flagBebidas = hayTipoProducto(productos, 'gaseosa') || hayTipoProducto(productos, 'cerveza') || hayTipoProducto(productos, 'vino');
     const flagNotas = notas.length > 0;
     const flagDireccion = datosCliente.calle.length > 0;
 
@@ -193,12 +193,12 @@ export const imprimirPedido = (notas, productos, datosCliente, cantidadEmpanadas
         acum += 8
         doc.setFontSize(10);
         productosOrdenados.forEach(producto => {
-            if (producto.tipoProducto === 'bebida') {
+            if (producto.tipoProducto === 'gaseosa' || producto.tipoProducto === 'cerveza' || producto.tipoProducto === 'vino') {
                 const text = `- ${producto.name}: ${producto.cantidad}`
                 doc.text(left, acum, text, {
-                    maxWidth: 43
+                    maxWidth: 42
                 });
-                if (producto.name.length > 22) {
+                if (producto.name.length > 20) {
                     acum += 7;
                 } else {
                     acum += 4;

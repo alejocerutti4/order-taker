@@ -29,6 +29,7 @@ const ListaProductos = () => {
     const [open, setOpen] = useState(false);
     const [textoModal, setTextoModal] = useState({ value: '', precio: 0, tipo: '', id: ''});
     const [productos, setProductos] = useState([]);
+    const [productosAlmacenados, setProductosAlmacenados] = useState([]);
     const [loading, setLoading] = useState(true);
     const [spinner, setSpinner] = useState(false);
 
@@ -40,7 +41,7 @@ const ListaProductos = () => {
     const actualizarPrecio = async () => {
         let objectIndex = productos.findIndex((p => p.id === textoModal.id));
         productos[objectIndex].costo = textoModal.precio;
-        setProductos([...productos])
+        setProductos([...productos]);
         const producto = {
             name: textoModal.value,
             costo: textoModal.precio,
@@ -64,6 +65,7 @@ const ListaProductos = () => {
           const data = await getAllProductos();
           const ordenados = ordenarProductos(data);
           setProductos(ordenados);
+          setProductosAlmacenados(ordenados);
         }catch(e){
             console.log(e)
         }
@@ -71,9 +73,18 @@ const ListaProductos = () => {
           setLoading(false);
         }
       };
+    const buscarProducto = (e) => {
+        const busqueda = e.target.value;
+        if(busqueda === ""){
+            setProductos(productosAlmacenados);
+        }else{
+            const productosFiltrados = productosAlmacenados.filter(prod => prod.name.trim().toLowerCase().includes(busqueda.trim().toLowerCase()));
+            setProductos(productosFiltrados);
+        };
+    };
 
     useEffect(()=>{
-        getProductos()
+        getProductos();
     }, [])
 
 
@@ -87,6 +98,7 @@ const ListaProductos = () => {
                     <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
                         Lista de productos
                     </Typography>
+                    <input type="search" placeholder="Buscar producto..." onChange={e => buscarProducto(e)} id="Buscador" />
                     <Demo>
                         <List sx={{ backgroundColor: "white" }}>
 

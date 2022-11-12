@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "https://laabuela-api-production.up.railway.app/api/v1/";
+const url = "http://54.207.49.31:8080/api/v1/";
 
 const getAllProductos = async () => {
     const token = localStorage.getItem("token");
