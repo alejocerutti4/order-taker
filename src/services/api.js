@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "https://laabuela-api.onrender.com/api/v1/";
+const url = "https://laabuela-api.fly.dev/api/v1/";
 
 const getAllProductos = async () => {
     const token = localStorage.getItem("token");
