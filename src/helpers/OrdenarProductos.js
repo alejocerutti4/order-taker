@@ -19,6 +19,12 @@ const ordenarPizzas = (pizzas) => {
     
 }
 
+const ordenarEmpanadas = (empanadas) => {
+    // we have to order empanadas alphabetically take into consideration accents and ñ for examplo Árabes should go first
+    const orden = empanadas.sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+    return orden;
+}
+
 const ordenarBebidas = (bebidas) => {
     // we have to separate the bebidas that have the word 'Vino' from the bebidas that don't have the word 'Vino'
     const vino = bebidas.filter(bebida => bebida.includes('Vino')).sort();
@@ -46,4 +52,4 @@ const intercalar = (array1, array2) => {
     }
     return array3;
 }
-export { ordenarSandwichs, ordenarPizzas, ordenarBebidas, ordenarProductos };
+export { ordenarSandwichs, ordenarPizzas, ordenarBebidas, ordenarProductos, ordenarEmpanadas };
