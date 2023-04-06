@@ -18,7 +18,7 @@ import { getAllProductos } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import Loader  from "../Loader";
 import { LogueadoContext } from "../../helpers/Context";
-import { ordenarSandwichs, ordenarPizzas, ordenarBebidas } from "../../helpers/OrdenarProductos";
+import { ordenarSandwichs, ordenarPizzas, ordenarBebidas, ordenarEmpanadas } from "../../helpers/OrdenarProductos";
 const Icon = styled("img")({
   height: "30px",
   width: "30px",
@@ -41,34 +41,12 @@ const Productos = ({
   productos,
   setProductos,
 }) => {
-  const Empanadas = [
-    "Árabes",
-    "Albahaca",
-    "Ananá",
-    "Calabresa",
-    "Carne Picante",
-    "Carne Suave",
-    "Cebolla",
-    "Champignones",
-    "Criolla Dulce",
-    "Criolla Salada",
-    "Gallega",
-    "Humita",
-    "Jamón y Queso",
-    "Palmitos",
-    "Panceta y Ciruela",
-    "Pera",
-    "Pollo",
-    "Pollo Picante",
-    "Puerro",
-    "Roquefort y Apio",
-    "Verdura",
-    "Zapallito",
-  ];
+  
 
   const [precioCarta, setPrecioCarta] = useState([]);
   const [Sandwichs, setSandwichs] = useState([]);
   const [Pizzas, setPizzas] = useState([]);
+  const [Empanadas, setEmpanadas] = useState([]);
   const [Gaseosas, setGaseosas] = useState([]);
   const [Cervezas, setCervezas] = useState([]);
   const [Vinos, setVinos] = useState();
@@ -106,6 +84,12 @@ const Productos = ({
         vinos
       );
 
+      const empanadas = productos.filter((precio) => precio.tipo === "empanada").map((precio) => precio.name);
+      setEmpanadas(
+        ordenarEmpanadas(empanadas)
+      );
+
+
 
       setPrecioEmpanada(
         productos.find(
@@ -136,7 +120,6 @@ const Productos = ({
   useEffect(() => {
     getProductos();
   }, []);
-
   useEffect(() => {
     let total = 0;
     let totalEmpanadas = 0;
