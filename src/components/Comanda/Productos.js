@@ -94,7 +94,7 @@ const Productos = ({
       setPrecioEmpanada(
         productos.find(
           (p) =>
-            p.name.toUpperCase().trim() === "Empanadas".toUpperCase().trim()
+            p.tipo.toUpperCase().trim() === "empanada_precio".toUpperCase().trim()
         ).costo
       );
       const promos = productos.filter((prod) => prod.tipo === "promocion");

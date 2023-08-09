@@ -22,6 +22,26 @@ const updateProducto = async (producto, id) => {
     return response;
 }
 
+const guardarNuevoProducto = async (producto) => {
+    const token = localStorage.getItem("token");
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    };
+    const response = await axios.post(url + "productos/", producto, { headers });
+    return response;
+}
+
+const deleteProducto = async (id) => {
+    const token = localStorage.getItem("token");
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    };
+    const response = await axios.delete(url + "productos/" + id, { headers });
+    return response;
+}
+
 const logIn = async (email, password) => {
     try{
         const response = await axios.post(url + "login", { email, password });
@@ -30,5 +50,5 @@ const logIn = async (email, password) => {
         return e.response;
     }
 }
-export { getAllProductos, updateProducto, logIn };
+export { getAllProductos, updateProducto, guardarNuevoProducto, deleteProducto, logIn };
 
