@@ -1,17 +1,14 @@
 const ordenarSandwichs = (sandwichs) => {
-    // lomos goes first, then hamburguesa, then sandwich then mila. to do this we need to sort the sandwichs by looking the word into the name of the sandwich.
     const lomos = sandwichs.filter(sandwich => sandwich.includes('Lomo'));
     const hamburguesa = sandwichs.filter(sandwich => sandwich.includes('Hambur'));
     const sandwich = sandwichs.filter(sandwich => sandwich.includes('Sandwich'));
     const mila = sandwichs.filter(sandwich => sandwich.includes('Mila') && !sandwich.includes('Sandwich'));
-    const orden = [...lomos, ...hamburguesa, ...sandwich, ...mila];
-
-
+    const rest = sandwichs.filter(sandwich => !sandwich.includes('Lomo') && !sandwich.includes('Hambur') && !sandwich.includes('Sandwich') && !sandwich.includes('Mila'));
+    const orden = [...lomos, ...hamburguesa, ...sandwich, ...mila, ...rest];
     return orden;
 } 
 
 const ordenarPizzas = (pizzas) => {
-    // we have to separate the pizzas by the pizzas that have the word 'Media' and the pizzas that don't have the word 'Media'
     const media = pizzas.filter(pizza => pizza.includes('Media')).sort();
     const sinMedia = pizzas.filter(pizza => !pizza.includes('Media')).sort();
     const orden = intercalar(sinMedia, media);
@@ -20,13 +17,11 @@ const ordenarPizzas = (pizzas) => {
 }
 
 const ordenarEmpanadas = (empanadas) => {
-    // we have to order empanadas alphabetically take into consideration accents and ñ for examplo Árabes should go first
     const orden = empanadas.sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
     return orden;
 }
 
 const ordenarBebidas = (bebidas) => {
-    // we have to separate the bebidas that have the word 'Vino' from the bebidas that don't have the word 'Vino'
     const vino = bebidas.filter(bebida => bebida.includes('Vino')).sort();
     const sinVino = bebidas.filter(bebida => !bebida.includes('Vino')).sort();
     const orden = [...sinVino, ...vino];
@@ -34,7 +29,6 @@ const ordenarBebidas = (bebidas) => {
 }
 
 const ordenarProductos = (productos) => {
-    // we have to sort the products by type
     const empanadas = productos.filter(producto => producto.tipo === 'empanada');
     const sandwichs = productos.filter(producto => producto.tipo === 'sandwich');
     console.log(sandwichs)
